@@ -89,18 +89,18 @@ def parse_args():
         default=5,
         help="The percentage of the train set used as validation set in case there's no validation split",
     )
-    #parser.add_argument(
-    #    "--model_name_or_path",
-    #    type=str,
-    #    help="Path to pretrained model or model identifier from huggingface.co/models.",
-    #    required=False,
-    #)
-    #parser.add_argument(
-    #    "--config_name",
-    #    type=str,
-    #    default=None,
-    #   help="Pretrained config name or path if not the same as model_name",
-    #)
+    parser.add_argument(
+        "--model_name_or_path",
+        type=str,
+        help="Path to pretrained model or model identifier from huggingface.co/models.",
+        required=False,
+    )
+    parser.add_argument(
+        "--config_name",
+        type=str,
+        default=None,
+        help="Pretrained config name or path if not the same as model_name",
+    )
     parser.add_argument(
         "--tokenizer_name",
         type=str,
@@ -376,8 +376,13 @@ def main():
     #
     # In distributed training, the .from_pretrained methods guarantee that only one local process can concurrently
     # download model & vocab.
-    config = CONFIG_MAPPING[args.model_type]()
-    logger.warning("You are instantiating a new config instance from scratch.")
+    if args.config_name:
+        config = AutoConfig.from_pretrained(args.config_name)
+    elif args.model_name_or_path:
+        config = AutoConfig.from_pretrained(args.model_name_or_path)
+    else:
+        config = CONFIG_MAPPING[args.model_type]()
+        logger.warning("You are instantiating a new config instance from scratch.")
 
     if args.tokenizer_name:
         tokenizer = AutoTokenizer.from_pretrained(args.tokenizer_name, use_fast=not args.use_slow_tokenizer)

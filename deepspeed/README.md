@@ -6,3 +6,4 @@ docker exec -it deepspeed_test bash
 apt update && apt install vim python3 git -y
 apt install python-is-python3 pip -y
 pip install git+https://github.com/huggingface/transformers
+pip install transformers[deepspeed]

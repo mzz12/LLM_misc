@@ -82,6 +82,15 @@ def causal_lm_model_to_fp32_loss(model):
     model.forward = causal_lm_forward
 
 
+def create_OPT_model_from_config(path,
+                    tokenizer,
+                    ds_config=None,
+                    rlhf_training=False,
+                    dropout=None):
+    model_config = OPTConfig.from_json_file(path)
+    model = AutoModelForCausalLM.from_config(model_config)
+
+
 def create_hf_model(model_class,
                     model_name_or_path,
                     tokenizer,

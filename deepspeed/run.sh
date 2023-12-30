@@ -3,8 +3,8 @@
 deepspeed main.py \
    --data_path yitingxie/rlhf-reward-datasets \
    --data_split 2,4,4 \
-   --model_config_path ./config.json \
-   --per_device_train_batch_size 8 \
+   --model_name_or_path ./config.json \
+   --per_device_train_batch_size 1 \
    --max_seq_len 512 \
    --learning_rate 9.65e-6 \
    --weight_decay 0. \

@@ -14,6 +14,5 @@ deepspeed main.py \
    --num_warmup_steps 0 \
    --zero_stage 3 \
    --offload \
-   --gradient_checkpointing \   
    --deepspeed \
-   --output_dir ./output \
+   --output_dir ./output

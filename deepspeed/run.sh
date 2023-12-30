@@ -13,6 +13,7 @@ deepspeed main.py \
    --lr_scheduler_type cosine \
    --num_warmup_steps 0 \
    --zero_stage 3 \
+   --gradient_checkpointing \
    --offload \
    --deepspeed \
    --output_dir ./output

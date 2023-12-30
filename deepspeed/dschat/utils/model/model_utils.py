@@ -8,6 +8,8 @@ import torch
 from transformers import (
     AutoConfig,
     AutoModel,
+    OPTConfig,
+    AutoModelForCausalLM,
 )
 from huggingface_hub import snapshot_download
 from transformers.deepspeed import HfDeepSpeedConfig

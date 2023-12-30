@@ -82,15 +82,6 @@ def causal_lm_model_to_fp32_loss(model):
     model.forward = causal_lm_forward
 
 
-def create_OPT_model_from_config(path,
-                    tokenizer,
-                    ds_config=None,
-                    rlhf_training=False,
-                    dropout=None):
-    model_config = OPTConfig.from_json_file(path)
-    model = AutoModelForCausalLM.from_config(model_config)
-
-
 def create_hf_model(model_class,
                     model_name_or_path,
                     tokenizer,
@@ -100,20 +91,23 @@ def create_hf_model(model_class,
     model_config = AutoConfig.from_pretrained(model_name_or_path)
     configure_dropout(model_config, dropout)
 
-    # Note: dschf is defined in function scope to avoid global effects
-    # https://huggingface.co/docs/transformers/main_classes/deepspeed#nontrainer-deepspeed-integration
-    if ds_config is not None and ds_config["zero_optimization"]["stage"] == 3:
-        dschf = HfDeepSpeedConfig(ds_config)
-    else:
-        dschf = None
-    if rlhf_training:
-        # the weight loading is handled by create critic model
-        model = model_class.from_config(model_config)
-    else:
-        model = model_class.from_pretrained(
-            model_name_or_path,
-            from_tf=bool(".ckpt" in model_name_or_path),
-            config=model_config)
+    # # Note: dschf is defined in function scope to avoid global effects
+    # # https://huggingface.co/docs/transformers/main_classes/deepspeed#nontrainer-deepspeed-integration
+    # if ds_config is not None and ds_config["zero_optimization"]["stage"] == 3:
+    #     dschf = HfDeepSpeedConfig(ds_config)
+    # else:
+    #     dschf = None
+    # if rlhf_training:
+    #     # the weight loading is handled by create critic model
+    #     model = model_class.from_config(model_config)
+    # else:
+    #     model = model_class.from_pretrained(
+    #         model_name_or_path,
+    #         from_tf=bool(".ckpt" in model_name_or_path),
+    #         config=model_config)
+
+    model_config = OPTConfig.from_json_file("./config.json")
+    model = AutoModelForCausalLM.from_config(model_config)
 
     model.config.end_token_id = tokenizer.eos_token_id
     model.config.pad_token_id = model.config.eos_token_id
